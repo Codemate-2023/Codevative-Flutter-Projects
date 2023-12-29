@@ -30,28 +30,26 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  Future<List<AssetEntity>?> callPicker() => InstaAssetPicker.pickAssets(
+        cropDelegate: const InstaAssetCropDelegate(isSquareDefaultCrop: true),
+        context,
+        title: 'Select images',
+        maxAssets: 10,
+        closeOnComplete: true,
+        onCompleted: (Stream<InstaAssetsExportDetails> cropStream) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => PickerCropResultScreen(cropStream: cropStream),
+            ),
+          );
+        },
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Future<List<AssetEntity>?> callPicker() =>
-              InstaAssetPicker.pickAssets(
-                cropDelegate:
-                    const InstaAssetCropDelegate(isSquareDefaultCrop: true),
-                context,
-                title: 'Select images',
-                maxAssets: 10,
-                closeOnComplete: true,
-                onCompleted: (Stream<InstaAssetsExportDetails> cropStream) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) =>
-                          PickerCropResultScreen(cropStream: cropStream),
-                    ),
-                  );
-                },
-              );
           callPicker();
         },
         tooltip: 'Increment',
